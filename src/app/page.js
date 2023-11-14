@@ -3,8 +3,15 @@ import Navbar from './components/Navbar'
 import PageTitle from './components/PageTitle'
 import PageContent from './components/PageContent'
 import Card from './components/Card'
+import { createClient } from '@supabase/supabase-js'
 
-export default function Home() {
+// Create a single supabase client for interacting with your database
+const supabase = createClient('https://rgssivwiganotufotsrf.supabase.co', process.env.SUPABASE_SECRET)
+export const revalidate = 0
+
+export default async function Home() {
+  const { data: Cards, error } = await supabase.from('Cards').select('*')
+  // console.log(Cards)
   return (
     <div>
       <Navbar />
@@ -14,35 +21,17 @@ export default function Home() {
         <div className="bg-gray-400 flex flex-col items-center p-8">
           <h1 className="text-3xl font-bold mb-4">Life is too short to cry</h1>
           <p className="text-gray-700 mb-8">Below are some beautiful moments in life.</p>
-
           <div className="flex space-x-4">
-            {/* Card for Sunrise */}
-            <Card
-              title={'Life Starts'}
-              description={'Life is like a sunrise it starts beautifully with endless possibilities.'}
-              img={'https://wallpaperaccess.com/full/1288969.jpg'}
-              alt={'Sunrise'}
-            />
-            {/* Card for MidDay */}
-            <Card
-              title={'Life In between'}
-              description={'Mid Day is everyday life some parts we find boring and some parts are exciting.'}
-              img={
-                'https://res.cloudinary.com/fleetnation/image/private/c_fill,g_center,h_640,w_640/v1535456838/hphwgkkc7gebnvr6auwk.jpg'
-              }
-              alt={'MidDay'}
-            />
-            {/* Card for Sunset */}
-            <Card
-              title={'Life Ends'}
-              description={
-                'A Sunset is something that we always take for granted, Its beautiful and symbolic but we never know if we are going to see another sunset again.'
-              }
-              img={'https://cdn.wallpapersafari.com/96/74/gr1xto.jpg'}
-              alt={'Sunset'}
-            />
+            {Cards.map((Card_Data, idx) => (
+              <Card
+                key={idx}
+                title={Card_Data.Title}
+                description={Card_Data.Description}
+                img={Card_Data.Image}
+                alt={Card_Data.Subtitle}
+              />
+            ))}
           </div>
-
           <div className="additional-element mt-12 text-center prose">
             <h2 className="text-2xl font-bold mb-2">At Dawn&rsquo;s First Light (A Journey Through Day)</h2>
             <p className="text-black">
