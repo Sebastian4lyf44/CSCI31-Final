@@ -4,6 +4,7 @@ import PageTitle from './components/PageTitle'
 import PageContent from './components/PageContent'
 import Card from './components/Card'
 import { createClient } from '@supabase/supabase-js'
+import Footer from './footer'
 
 // Create a single supabase client for interacting with your database
 const supabase = createClient('https://rgssivwiganotufotsrf.supabase.co', process.env.SUPABASE_SERVICE_ROLE_KEY)
@@ -82,6 +83,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
