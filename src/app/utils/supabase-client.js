@@ -11,7 +11,7 @@ export async function insertCard(card) {
   console.log('error', error)
 }
 
-export async function findCards({ query }) {
+export async function findCards() {
   const supabase = getClient()
   const { data: Cards, error } = await supabase.from('Cards').select('*')
   return Cards
