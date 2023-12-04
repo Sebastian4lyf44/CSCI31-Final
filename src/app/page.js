@@ -11,7 +11,6 @@ export const revalidate = 0
 
 export default async function Home() {
   const Cards = await findCards()
-  // console.log(Cards)
   return (
     <div>
       <Navbar />
@@ -25,10 +24,10 @@ export default async function Home() {
             {Cards.map((Card_Data, idx) => (
               <Card
                 key={idx}
-                title={Card_Data.Title}
-                description={Card_Data.Description}
-                img={Card_Data.Image}
-                alt={Card_Data.Subtitle}
+                title={Card_Data.title}
+                description={Card_Data.description}
+                img={Card_Data.img}
+                alt={Card_Data.subtitle}
               />
             ))}
           </div>

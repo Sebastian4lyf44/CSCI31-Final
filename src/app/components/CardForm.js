@@ -1,42 +1,64 @@
-import { redirect } from 'next/navigation'
+'use client';
+
+//import { redirect } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { insertCard } from '../utils/supabase-client'
 import Button from './Button'
 import Field from './Field'
 import Input from './Input'
 import Label from './Label'
-async function createCard(formData) {
-  'use server'
-  const title = formData.get('title')
-  const subtitle = formData.get('subtitle')
-  const img = formData.get('img')
-  const description = formData.get('description')
-  insertCard(title, subtitle, img, description)
-  redirect('/')
-  // Extract fields from formData and call insertCard
-}
+import { createClient } from '@supabase/supabase-js';
 
-export default function CardForm() {
-  // Render form with action attribute set to createCard
+
+export default function CardForm({ onAddCard }) {
+  //const router = useRouter()
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+
+    // Create an object with the form data
+    const newCard = {
+      title: formData.get('title'),
+      subtitle: formData.get('subtitle'),
+      img: formData.get('img'),
+      description: formData.get('description'),
+    }
+
+    // Call the insertCard function (assuming it's an async operation)
+    await insertCard(newCard)
+
+    // Call the onAddCard function if it's provided
+    if (onAddCard) {
+      onAddCard(newCard)
+    }
+
+    // Optionally, reset the form here
+    event.target.reset()
+
+    // Redirect to the home page (or any other page)
+    //router.push('/')
+  }
+
   return (
-    <form action={createCard} className="p-4 bg-emerald-800 rounded-lg mt-4">
+    <form onSubmit={handleSubmit} className="p-4 bg-emerald-800 rounded-lg mt-4">
       {/* Render Button and Field components with Label and Input */}
       <Field>
-        <Label label="title" /* title label props */ />
-        <Input id="title" name="title" /* title input props */ />
+        <Label label="Title" htmlFor="title" />
+        <Input id="title" name="title" />
       </Field>
       <Field>
-        <Label label="subtitle" /* title label props */ />
-        <Input id="subtitle" name="subtitle" /* title input props */ />
+        <Label label="Subtitle" htmlFor="subtitle" />
+        <Input id="subtitle" name="subtitle" />
       </Field>
       <Field>
-        <Label label="image" /* image label props */ />
-        <Input id="image" name="image" /* image input props */ />
+        <Label label="Image" htmlFor="img" />
+        <Input id="img" name="img" />
       </Field>
       <Field>
-        <Label label="description" /* description label props */ />
-        <Input id="description" name="description" /* description input props */ />
+        <Label label="Description" htmlFor="description" />
+        <Input id="description" name="description" />
       </Field>
-      {/* Repeat for subtitle, img, and description */}
       <div className="mt-4 flex justify-end">
         <Button type="submit">Add Card</Button>
       </div>
